@@ -19,7 +19,7 @@ if (fs.existsSync(envPath)) {
   const dotenv = (await import('dotenv')).config({path: envPath});
 }
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.NEXT_PUBLIC_GROQ_API_KEY;
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 if (!GROQ_API_KEY) {
   console.error('ERROR: No se encontró GROQ_API_KEY en las variables de entorno. Rellena .env con tu clave.');
@@ -30,7 +30,7 @@ const endpoint = 'https://api.groq.com/openai/v1/chat/completions';
 
 async function main() {
   const payload = {
-    model: 'llama-3',
+    model: 'llama3-8b-8192',
     messages: [
       {role: 'system', content: 'You are a test harness.'},
       {role: 'user', content: 'Saluda brevemente y di que la prueba funciona.'}

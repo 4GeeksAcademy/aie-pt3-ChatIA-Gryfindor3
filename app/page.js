@@ -46,14 +46,37 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    if (messages.length === 0) {
+      localStorage.removeItem(STORAGE_KEYS.messages);
+      return;
+    }
+
     localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify(messages));
   }, [messages]);
 
   useEffect(() => {
+    const hasTokenData =
+      tokenTotals.prompt_tokens > 0 ||
+      tokenTotals.completion_tokens > 0 ||
+      tokenTotals.total_tokens > 0;
+
+    if (!hasTokenData) {
+      localStorage.removeItem(STORAGE_KEYS.metrics);
+      return;
+    }
+
     localStorage.setItem(STORAGE_KEYS.metrics, JSON.stringify(tokenTotals));
   }, [tokenTotals]);
 
   useEffect(() => {
+    const hasLastInfoData =
+      lastInfo.model !== '-' || lastInfo.elapsedMs > 0 || lastInfo.tokensPerSecond > 0;
+
+    if (!hasLastInfoData) {
+      localStorage.removeItem(STORAGE_KEYS.lastInfo);
+      return;
+    }
+
     localStorage.setItem(STORAGE_KEYS.lastInfo, JSON.stringify(lastInfo));
   }, [lastInfo]);
 
@@ -188,7 +211,7 @@ export default function HomePage() {
         </section>
 
         <button type="button" className="clear-btn" onClick={handleClearConversation}>
-          Borrar conversacion
+          Borrar conversación
         </button>
       </aside>
 
